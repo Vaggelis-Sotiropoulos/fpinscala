@@ -52,7 +52,7 @@ object List { // `List` companion object. Contains functions for creating and wo
 
   def tail[A](l: List[A]): List[A] =
     l match {
-      case Nil => Nil
+      case Nil => sys.error("tail of empty list")
       case Cons(x, xs) => xs
     }
 
