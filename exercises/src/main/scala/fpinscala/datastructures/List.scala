@@ -43,7 +43,6 @@ object List { // `List` companion object. Contains functions for creating and wo
     as match {
       case Nil => z
       case Cons(x, xs) => f(x, foldRight(xs, z)(f))
-    }
 
   def sum2(ns: List[Int]) =
     foldRight(ns, 0)((x,y) => x + y)
@@ -108,6 +107,9 @@ object List { // `List` companion object. Contains functions for creating and wo
 
   def foldRightViafoldLeft[A, B](l: List[A], z: B)(f: (A, B) => B): B =
     foldLeft(reverse(l), z)((b, a) => f(a, b))
+
+  def foldLeftViafoldRight[A,B](l: List[A], z: B)(f: (B,A) => B): B =
+    foldRight(l, (b:B) => b)((a,g) => b => g(f(b,a)))(z)
 
   def map[A,B](l: List[A])(f: A => B): List[B] = ???
 }
