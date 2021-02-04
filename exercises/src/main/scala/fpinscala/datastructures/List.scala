@@ -114,5 +114,13 @@ object List { // `List` companion object. Contains functions for creating and wo
   def append(l: List[A], l2: List[A]): List[A] =
     foldRight(l, l2)(Cons(_,_))
 
+  def flattenList(l: List[List[A]]): List[A] = {
+    def loop(l1: List[List[A]], acc: List[A]): List[A] = l1 match {
+      case Nil => acc
+      case Cons(h, t) => loop(t, append(acc, h))
+    }
+    loop(l, List[A]())
+  }
+
   def map[A,B](l: List[A])(f: A => B): List[B] = ???
 }
