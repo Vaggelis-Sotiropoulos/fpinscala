@@ -117,5 +117,8 @@ object List { // `List` companion object. Contains functions for creating and wo
   def flattenList(l: List[List[A]]): List[A] =
     foldRight(l, Nil:List[A])(append)
 
+  def transformIntList(l: List[Int]): List[Int] =
+    foldLeft(l, Nil:List[Int])((l1, n) => Cons(n+1, l1))
+
   def map[A,B](l: List[A])(f: A => B): List[B] = ???
 }
