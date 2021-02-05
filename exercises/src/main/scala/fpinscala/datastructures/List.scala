@@ -148,17 +148,15 @@ object List { // `List` companion object. Contains functions for creating and wo
     case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1, h2), zipWith(t1, t2)(f))
   }
 
-  def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = {
-    def loop[A](sup1: List[A], sub1: List[A], prevMatch: Boolean): Boolean = {
-      (sup1, sub1) match {
-        case(_, Nil) => true // if at end of sublist, true as all of sublist looped through
-        case (Nil, _) => false // if at end of suplist, false as suplist looped through before sublist
-        case (Cons(hsup, tsup), Cons(hsub, tsub)) =>
-          if (hsup == hsub) loop(tsup, tsub, true) // loop through both lists if heads equal
-          else if (prevMatch && (hsup != hsub)) loop(sup1, sub, false) // start sublist from beginning and and keep suplist head if current heads are not equal but previous one is
-          else loop(tsup, sub1, false) // else loop through suplist
-      }
-    }
-    if (length(sub) > length(sup)) false else loop(sup, sub, false) // not possible for sub to be contained within sup if greater length than sup
+  def startsWith[A](l: List[A], prefix: List[A]): Boolean = (l,prefix) match {
+    case (_,Nil) => true
+    case (Cons(h,t),Cons(h2,t2)) if h == h2 => startsWith(t, t2)
+    case _ => false
+  }
+
+  def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = sup match {
+    case Nil => sub == Nil
+    case _ if startsWith(sup, sub) => true
+    case Cons(_,t) => hasSubsequence(t, sub)
   }
 }
