@@ -43,6 +43,7 @@ object List { // `List` companion object. Contains functions for creating and wo
     as match {
       case Nil => z
       case Cons(x, xs) => f(x, foldRight(xs, z)(f))
+    }
 
   def sum2(ns: List[Int]) =
     foldRight(ns, 0)((x,y) => x + y)
@@ -123,5 +124,6 @@ object List { // `List` companion object. Contains functions for creating and wo
   def transformDoubleToString(l: List[Double]): List[String] =
     foldRight(l, Nil:List[String])((n, l1) => Cons(n.toString, l1))
 
-  def map[A,B](l: List[A])(f: A => B): List[B] = ???
+  def map[A,B](l: List[A])(f: A => B): List[B] =
+    foldRight(l, Nil:List[B])((n, l1) => Cons(f(n), l1))
 }
