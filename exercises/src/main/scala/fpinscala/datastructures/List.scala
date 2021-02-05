@@ -118,7 +118,10 @@ object List { // `List` companion object. Contains functions for creating and wo
     foldRight(l, Nil:List[A])(append)
 
   def transformIntList(l: List[Int]): List[Int] =
-    foldLeft(l, Nil:List[Int])((l1, n) => Cons(n+1, l1))
+    foldRight(l, Nil:List[Int])((n, l1) => Cons(n+1, l1))
+
+  def transformDoubleToString(l: List[Double]): List[String] =
+    foldRight(l, Nil:List[String])((n, l1) => Cons(n.toString, l1))
 
   def map[A,B](l: List[A])(f: A => B): List[B] = ???
 }
