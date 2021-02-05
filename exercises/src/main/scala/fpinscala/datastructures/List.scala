@@ -112,10 +112,10 @@ object List { // `List` companion object. Contains functions for creating and wo
   def foldLeftViafoldRight[A,B](l: List[A], z: B)(f: (B,A) => B): B =
     foldRight(l, (b:B) => b)((a,g) => b => g(f(b,a)))(z)
 
-  def append(l: List[A], l2: List[A]): List[A] =
+  def append[A](l: List[A], l2: List[A]): List[A] =
     foldRight(l, l2)(Cons(_,_))
 
-  def flattenList(l: List[List[A]]): List[A] =
+  def flattenList[A](l: List[List[A]]): List[A] =
     foldRight(l, Nil:List[A])(append)
 
   def transformIntList(l: List[Int]): List[Int] =
@@ -129,4 +129,7 @@ object List { // `List` companion object. Contains functions for creating and wo
 
   def filter[A](as: List[A])(f: A => Boolean): List[A] =
     foldRight(as, Nil:List[A])((n, l1) => if (f(n)) Cons(n, l1) else l1)
+
+  def flatMap[A,B](as: List[A])(f: A => List[B]): List[B] =
+    foldRight(as, Nil:List[B])((n, l1) => append(f(n), l1))
 }
