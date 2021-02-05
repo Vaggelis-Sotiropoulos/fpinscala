@@ -17,4 +17,15 @@ object Tree {
       case Branch(l, r) => maximum(l).max(maximum(r))
     }
 
+  def maxPathLength[A](node: Tree[A]): Int = {
+    def pathCount(node1: Tree[A], numPath: Int): Int ={
+      val numPath2 = numPath + 1
+      node1 match {
+        case Leaf(_) => numPath2
+        case Branch(l, r) => pathCount(l, numPath2).max(pathCount(r, numPath2))
+      }
+    }
+    pathCount(node, 0)
+  }
+
 }
