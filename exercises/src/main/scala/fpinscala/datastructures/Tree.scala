@@ -7,28 +7,20 @@ case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
 
 object Tree {
 
-  def size[A](node: Tree[A]): Int = node match {
-      case Leaf(_) => 1
-      case Branch(l,r) => 1 + size(l) + size(r)
-    }
+  def size[A](node: Tree[A]): Int =
+    fold(node)(a => 1)(1 + _ + _)
 
-  def maximum(node: Tree[Int]): Int = node match {
-      case Leaf(v) => v
-      case Branch(l, r) => maximum(l).max(maximum(r))
-    }
+  def maximum(node: Tree[Int]): Int =
+    fold(node)(a => a)(_ max _)
 
-  def maxPathLength[A](node: Tree[A]): Int = node match {
-    case Leaf(_) => 0
-    case Branch(l,r) => 1 + maxPathLength(l).max(maxPathLength(r))
-  }
+  def maxPathLength[A](node: Tree[A]): Int =
+    fold(node)(a => 0)((d1,d2) => 1 + (d1 max d2))
 
-  def map[A, B](node: Tree[A])(f: A => B): Tree[B] = node match {
-    case Leaf(v) => Leaf(f(v))
-    case Branch(l, r) => Branch(map(l)(f), map(r)(f))
-  }
+  def map[A, B](node: Tree[A])(f: A => B): Tree[B] =
+    fold(a => Leaf(f(a)): Tree[B])(Branch(_, _))
 
-  def fold[A, B](node: Tree[A], z: B)(f: (A, B) => B): B = node match {
-    case Leaf(v) => f(v, z)
-    case Branch(l, r) => fold(l, fold(r, z)(f))(f)
+  def fold[A,B](node: Tree[A])(f: A => B)(g: (B,B) => B): B = node match {
+    case Leaf(a) => f(a)
+    case Branch(l,r) => g(fold(l)(f)(g), fold(r)(f)(g))
   }
 }
