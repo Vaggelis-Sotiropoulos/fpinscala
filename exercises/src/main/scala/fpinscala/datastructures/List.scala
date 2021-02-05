@@ -132,4 +132,17 @@ object List { // `List` companion object. Contains functions for creating and wo
 
   def flatMap[A,B](as: List[A])(f: A => List[B]): List[B] =
     flattenList(map(as)(f))
+
+  def filterFlatMap[A](as: List[A])(f: A => Boolean): List[A] =
+    flatMap(as)(a => if (f(a)) List(a) else Nil)
+
+  def intListsAddition(l1: List[Int], l2: List[Int]): List[Int] = {
+    def loop(l3: List[Int], l4: List[Int], acc: List[Int]): List[Int] = {
+      (l3, l4) match {
+        case (Nil, Nil) => acc
+        case (Cons(h1,t1), Cons(h2,t2)) => Cons(h1+h2, loop(t1, t2, acc))
+      }
+    }
+    loop(l1, l2, Nil:List[Int])
+  }
 }
