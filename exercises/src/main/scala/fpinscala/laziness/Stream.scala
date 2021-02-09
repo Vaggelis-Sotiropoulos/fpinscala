@@ -27,15 +27,11 @@ trait Stream[+A] {
     loop(this, List[A]())
   }
 
-  def take(n: Int): Stream[A] = {
-    def loop(st: Stream[A]): Stream[A] = st match {
-      case Cons(h, t) if n > 1 => n-1; Cons(h, loop(t()))
-      case Cons(h, _) if n == 1 => Cons(h, Empty)
-    }
-
-    loop(this)
+  def take(n: Int): Stream[A] = this match {
+    case Cons(h, t) if n > 1 => cons(h(), t().take(n - 1))
+    case Cons(h, _) if n == 1 => cons(h(), empty)
+    case _ => empty
   }
-
 
   def drop(n: Int): Stream[A] = ???
 
