@@ -56,6 +56,8 @@ trait Stream[+A] {
 
   def flatMap[B](f: A => Stream[B]): Stream[B] = foldRight(empty[B])((a, b) => f(a) append b)
 
+  def constant[A](a: A): Stream[A] = cons(a, constant(a))
+
   def startsWith[B](s: Stream[B]): Boolean = ???
 }
 case object Empty extends Stream[Nothing]
