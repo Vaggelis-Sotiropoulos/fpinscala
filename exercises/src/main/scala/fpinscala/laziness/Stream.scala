@@ -39,7 +39,16 @@ trait Stream[+A] {
     case _ => empty
   }
 
-  def takeWhile(p: A => Boolean): Stream[A] = ???
+  def takeWhile(p: A => Boolean): Stream[A] = {
+    def loop(st: Stream[A]): Stream[A] = {
+      st match {
+        case Cons(h, t) => if (p(h())) cons(h(), loop(t())) else loop(t())
+        case _ => empty
+      }
+    }
+
+    loop(this)
+  }
 
   def forAll(p: A => Boolean): Boolean = ???
 
