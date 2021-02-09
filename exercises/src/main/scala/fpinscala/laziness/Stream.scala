@@ -17,6 +17,16 @@ trait Stream[+A] {
     case Empty => None
     case Cons(h, t) => if (f(h())) Some(h()) else t().find(f)
   }
+
+  def toList: List[A] = {
+    def loop(st: Stream[A], acc: List[A]): List[A] = st match {
+      case Cons(h, t) => loop(t(),  h() :: acc)
+      case _ => acc
+    }
+
+    loop(this, List[A]())
+  }
+
   def take(n: Int): Stream[A] = ???
 
   def drop(n: Int): Stream[A] = ???
