@@ -50,10 +50,7 @@ trait Stream[+A] {
     loop(this)
   }
 
-  def forAll(p: A => Boolean): Boolean = this match {
-    case Cons(h, t) => if (p(h())) t() forAll p else false
-    case _ => true
-  }
+  def forAll(p: A => Boolean): Boolean = foldRight(true)((a, b) => p(a) && b)
 
   def headOption: Option[A] = ???
 
