@@ -79,7 +79,7 @@ object Stream {
 
   def from(n: Int): Stream[Int] = unfold(n)(a => Some((a, a+1)))
 
-  def fibs(n1: Int, n2: Int): Stream[Int] = unfold((n1, n2))(a1 => Some((a1._2 + a1._1, (a1._2, a1._1+a1._2))))
+  def fibs(n1: Int, n2: Int): Stream[Int] = unfold((0, 1))(a1 => Some((a1._1, (a1._2, a1._1+a1._2))))
 
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] =
     f(z) match {
