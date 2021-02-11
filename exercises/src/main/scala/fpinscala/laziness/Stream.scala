@@ -53,22 +53,25 @@ trait Stream[+A] {
   // 5.7 map, filter, append, flatmap using foldRight. Part of the exercise is
   // writing your own function signatures.
 
-  def map[B](f: A => B): Stream[B] = unfold(this){
+  def map[B](f: A => B): Stream[B] =
+    unfold(this){
       case Cons(h, t) => Some(f(h()), t())
       case _ => None
     }
 
-  def zipWith[B,C](s2: Stream[B])(f: (A,B) => C): Stream[C] = unfold((this, s2)){
+  def zipWith[B,C](s2: Stream[B])(f: (A,B) => C): Stream[C] =
+    unfold((this, s2)){
       case (Cons(h1, t1), Cons(h2, t2)) => Some(f(h1(), h2()), (t1(), t2()))
       case _ => None
     }
 
-  def zipAll[B, C](s2: Stream[B]): Stream[(Option[A],Option[B])] = unfold((this, s2)){
-    case (Cons(h1, t1), Empty) => Some((Some(h1()), None), (t1(), empty))
-    case (Empty, Cons(h2, t2)) => Some((None, Some(h2())), (empty, t2()))
-    case (Cons(h1, t1), Cons(h2, t2)) => Some((Some(h1()), Some(h2())), (t1(), t2()))
-    case (_, _) => None
-  }
+  def zipAll[B, C](s2: Stream[B]): Stream[(Option[A],Option[B])] =
+    unfold((this, s2)){
+      case (Cons(h1, t1), Empty) => Some((Some(h1()), None), (t1(), empty))
+      case (Empty, Cons(h2, t2)) => Some((None, Some(h2())), (empty, t2()))
+      case (Cons(h1, t1), Cons(h2, t2)) => Some((Some(h1()), Some(h2())), (t1(), t2()))
+      case (_, _) => None
+    }
 
   def filter(f: A => Boolean): Stream[A] = foldRight(empty[A])((a, b) => if (f(a)) cons(a, b) else b)
 
