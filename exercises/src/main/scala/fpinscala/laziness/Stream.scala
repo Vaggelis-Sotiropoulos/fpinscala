@@ -79,7 +79,15 @@ trait Stream[+A] {
 
   def flatMap[B](f: A => Stream[B]): Stream[B] = foldRight(empty[B])((a, b) => f(a) append b)
 
-  def startsWith[B](s: Stream[B]): Boolean = ???
+  def startsWith[B](s: Stream[B]): Boolean =
+    unfold((this, s)){
+      case (_, Empty) => None
+      case (Cons(h1, t1), Cons(h2, t2)) if h1() == h2() => Some(h1(), (t1(), t2()))
+      case _ => None
+    } match {
+      case s2 if s2 == s => true
+      case _ => false
+    }
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
